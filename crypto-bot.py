@@ -37,11 +37,11 @@ def fetch_forex_data(pair):
 
 # Main bot function
 def trading_bot():
-    crypto_symbol = "BTCUSDT"  # Replace with your desired cryptocurrency pair
+    crypto_symbol = "XRPUSDT"  # Replace with your desired cryptocurrency pair
     forex_pair = "EUR/USD"  # Replace with your desired forex pair
 
     start_time = time.time()
-    duration = 10  # Time in seconds to collect data
+    duration = 22  # Time in seconds to collect data
     while time.time() - start_time < duration:
         # Fetch cryptocurrency data
         crypto_price = fetch_crypto_data(crypto_symbol)
