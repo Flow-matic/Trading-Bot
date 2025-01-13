@@ -1,0 +1,30 @@
+ requirements.txt file in Gitpod with your installed Python packages, follow these steps:
+
+ 1. Install Your Required Packages:
+ Make sure you have installed all the necessary Python packages in your Gitpod environment, including web3:
+
+ bash
+ Copy code
+ pip install web3
+ 2. Generate the requirements.txt File:
+ Run the following command to create a requirements.txt file with all currently installed packages:
+
+ bash
+ Copy code
+ pip freeze > requirements.txt
+ This will save the list of all installed Python packages and their versions into the requirements.txt file.
+
+Commit and Push the requirements.txt File (Optional)
+If you're working with version control (e.g., Git), make sure to commit the requirements.txt file so that others or your future self can easily install the dependencies.
+
+bash
+Copy code
+git add requirements.txt
+git commit -m "Add requirements.txt"
+git push
+5. Using requirements.txt for Future Installations
+In the future, if you clone this project or need to set up your environment again, you can use the requirements.txt file to install all the dependencies at once:
+
+bash
+Copy code
+pip install -r requirements.txt
