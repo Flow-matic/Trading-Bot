@@ -1,14 +1,13 @@
 from web3 import Web3
 import requests
 import time
-import json
 
 # Binance Smart Chain (BSC) RPC URL
 BSC_RPC = "https://bsc-dataseed.binance.org/"
 web3 = Web3(Web3.HTTPProvider(BSC_RPC))
 
 # Check Web3 connection
-if not web3.is_connected():  # Correct method name
+if not web3.is_connected():
     print("Failed to connect to Binance Smart Chain.")
     exit()
 
@@ -16,23 +15,36 @@ print("Connected to Binance Smart Chain.")
 
 # PancakeSwap Prediction Contract for BNBUSD (Mainnet)
 BNBUSD_CONTRACT_ADDRESS = "0x18B2A687610328590Bc8F2e5fEdDe3b582A49cdA"
-BNBUSD_ABI_URL = "https://raw.githubusercontent.com/pancakeswap/pancake-frontend/master/src/config/abi/prediction.json"
 
-# Fetch BNBUSD Contract ABI
-bnbusd_abi_response = requests.get(BNBUSD_ABI_URL)
-if bnbusd_abi_response.status_code == 200:
-    try:
-        bnbusd_abi = bnbusd_abi_response.json()
-    except json.JSONDecodeError:
-        print("Error: The ABI response is not valid JSON.")
-        print(bnbusd_abi_response.text)  # Debug output
-        exit()
-else:
-    print(f"Failed to fetch ABI. HTTP Status Code: {bnbusd_abi_response.status_code}")
-    print(bnbusd_abi_response.text)  # Debug output
-    exit()
+# Manually define the ABI for the contract
+BNBUSD_ABI = [
+    {
+        "inputs": [],
+        "name": "currentEpoch",
+        "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+        "stateMutability": "view",
+        "type": "function",
+    },
+    {
+        "inputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+        "name": "rounds",
+        "outputs": [
+            {"internalType": "uint256", "name": "epoch", "type": "uint256"},
+            {"internalType": "uint256", "name": "startTime", "type": "uint256"},
+            {"internalType": "uint256", "name": "lockTime", "type": "uint256"},
+            {"internalType": "uint256", "name": "closeTime", "type": "uint256"},
+            {"internalType": "uint256", "name": "lockPrice", "type": "uint256"},
+            {"internalType": "uint256", "name": "closePrice", "type": "uint256"},
+            {"internalType": "uint256", "name": "totalAmount", "type": "uint256"},
+            {"internalType": "uint256", "name": "bullAmount", "type": "uint256"},
+            {"internalType": "uint256", "name": "bearAmount", "type": "uint256"},
+        ],
+        "stateMutability": "view",
+        "type": "function",
+    },
+]
 
-bnbusd_contract = web3.eth.contract(address=BNBUSD_CONTRACT_ADDRESS, abi=bnbusd_abi)
+bnbusd_contract = web3.eth.contract(address=BNBUSD_CONTRACT_ADDRESS, abi=BNBUSD_ABI)
 
 # Binance API for CAKEUSD Price Data
 BINANCE_API_URL = "https://api.binance.com/api/v3/ticker/price"
@@ -46,11 +58,11 @@ def fetch_bnbusd_round_data(epoch):
             "start_time": round_data[1],
             "lock_time": round_data[2],
             "close_time": round_data[3],
-            "lock_price": web3.from_wei(round_data[4], 'ether'),
-            "close_price": web3.from_wei(round_data[5], 'ether'),
-            "total_amount": web3.from_wei(round_data[8], 'ether'),
-            "bull_amount": web3.from_wei(round_data[9], 'ether'),
-            "bear_amount": web3.from_wei(round_data[10], 'ether'),
+            "lock_price": web3.from_wei(round_data[4], "ether"),
+            "close_price": web3.from_wei(round_data[5], "ether"),
+            "total_amount": web3.from_wei(round_data[6], "ether"),
+            "bull_amount": web3.from_wei(round_data[7], "ether"),
+            "bear_amount": web3.from_wei(round_data[8], "ether"),
         }
     except Exception as e:
         print(f"Error fetching BNBUSD round data: {e}")
@@ -95,3 +107,4 @@ def monitor_bnbusd_and_cakeusd():
 
 if __name__ == "__main__":
     monitor_bnbusd_and_cakeusd()
+
