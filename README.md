@@ -89,3 +89,51 @@ The bot can be configured to run for a specific duration and supports adding tra
 ## Disclaimer
 This bot is for educational purposes only. It does not include live trading functionality and is not intended for financial advice or use in real trading without further testing and risk management.
 
+---
+
+Disclaimer: This is for informational purposes only and should not be considered financial advice. Trading in prediction markets carries inherent risks, and you could lose money.
+
+Understanding the Pancakeswap Prediction Market Game
+
+The Pancakeswap prediction market game allows users to bet on the price movement of BNB/USD within a specific time frame. The game typically offers two options:
+
+UP: Bet that the price of BNB/USD will be higher at the end of the prediction period.
+DOWN: Bet that the price of BNB/USD will be lower at the end of the prediction period.
+Trading Strategy: Trend Following
+
+One potential strategy is to follow the overall trend of the BNB/USD price.
+
+Identify the Trend:
+
+Use technical analysis tools like moving averages (e.g., 50-day, 200-day) to determine the long-term trend.
+Look for bullish or bearish patterns in the price chart.
+Consider recent market news and events that might influence the price.
+Place Bets Accordingly:
+
+If the trend is bullish (upward), place bets on "UP".
+If the trend is bearish (downward), place bets on "DOWN".
+Additional Considerations:
+
+Risk Management:
+Never bet more than you can afford to lose.
+Consider using stop-loss orders to limit potential losses.
+Diversify your bets by placing smaller bets on multiple prediction rounds.
+Market Volatility:
+The BNB/USD price can be highly volatile.
+Be prepared for unexpected price swings.
+Game Specifics:
+Pay close attention to the game's rules and payout structure.
+Understand the time frame for each prediction round.
+Example:
+
+Let's say the 50-day moving average for BNB/USD is trending upwards. This suggests a bullish trend. You might then place bets on "UP" for the next few prediction rounds.
+
+Caveats:
+
+Past performance is not indicative of future results.
+Prediction markets are inherently speculative.
+This strategy does not guarantee profits.
+Remember:
+
+Do your own research and due diligence before making any trading decisions.
+Consider consulting with a financial advisor for personalized advice.
