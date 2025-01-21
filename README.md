@@ -1,5 +1,12 @@
 # Cryptocurrency and Forex Trading Bot
 
+---
+
+## Disclaimer
+This bot is for educational purposes only. It does not include live trading functionality and is not intended for financial advice or use in real trading without further testing and risk management.
+
+---
+
 ## Overview
 This trading bot collects real-time cryptocurrency and forex market data and allows for further customization to implement trading strategies. It fetches data using:
 
