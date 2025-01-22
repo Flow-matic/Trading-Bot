@@ -1,70 +1,131 @@
 from web3 import Web3
-import os
-from dotenv import load_dotenv
 import time
 
-# Load environment variables
-load_dotenv()
-RPC_URL = os.getenv("BSC_RPC_URL")
-PRIVATE_KEY = os.getenv("PRIVATE_KEY")
-WALLET_ADDRESS = os.getenv("WALLET_ADDRESS")
+# Use Binance Smart Chain (BSC) RPC URL or Infura/Alchemy if needed
+rpc_url = "https://bsc-dataseed.binance.org/"
+web3 = Web3(Web3.HTTPProvider(rpc_url))
 
-# Connect to Binance Smart Chain
-web3 = Web3(Web3.HTTPProvider(RPC_URL))
+# Check if the connection is successful
+if web3.is_connected():
+    print("Connected to Binance Smart Chain")
+else:
+    print("Failed to connect to Binance Smart Chain")
 
-# PancakeSwap Prediction Market Smart Contract Details
-CONTRACT_ADDRESS = "0x1234567890abcdef1234567890abcdef12345678"  # Replace with actual contract address
-ABI = [...]  # Paste the contract ABI here
+# Replace with actual PancakeSwap prediction market contract address and ABI
+CONTRACT_ADDRESS = "0x18B2A687610328590Bc8F2e5fEdDe3b582A49cdA"  # Replace with the actual contract address
+ABI = [
+    {
+        "inputs": [],
+        "name": "currentEpoch",
+        "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+        "stateMutability": "view",
+        "type": "function",
+    },
+    {
+        "inputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+        "name": "rounds",
+        "outputs": [
+            {"internalType": "uint256", "name": "epoch", "type": "uint256"},
+            {"internalType": "uint256", "name": "startTime", "type": "uint256"},
+            {"internalType": "uint256", "name": "lockTime", "type": "uint256"},
+            {"internalType": "uint256", "name": "closeTime", "type": "uint256"},
+            {"internalType": "uint256", "name": "lockPrice", "type": "uint256"},
+            {"internalType": "uint256", "name": "closePrice", "type": "uint256"},
+            {"internalType": "uint256", "name": "totalAmount", "type": "uint256"},
+            {"internalType": "uint256", "name": "bullAmount", "type": "uint256"},
+            {"internalType": "uint256", "name": "bearAmount", "type": "uint256"},
+        ],
+        "stateMutability": "view",
+        "type": "function",
+    },
+]
 
-contract = web3.eth.contract(address=Web3.to_checksum_address(CONTRACT_ADDRESS), abi=ABI)
+# Set up the contract
+contract = web3.eth.contract(address=web3.to_checksum_address(CONTRACT_ADDRESS), abi=ABI)
 
-def place_bet(direction, amount):
-    """
-    Function to place a bet on PancakeSwap Prediction market.
-    direction: "bull" (UP) or "bear" (DOWN)
-    amount: Amount of BNB to bet
-    """
-    # Determine function to call based on direction
-    if direction.lower() == "bull":
-        bet_function = contract.functions.betBull
-    elif direction.lower() == "bear":
-        bet_function = contract.functions.betBear
-    else:
-        raise ValueError("Invalid direction. Use 'bull' or 'bear'.")
+# Function to fetch historical round data
+def fetch_historical_round_data(round_count=10):
+    rounds = []
+    current_epoch = contract.functions.currentEpoch().call()
+    
+    for epoch in range(current_epoch - round_count, current_epoch):
+        try:
+            round_data = contract.functions.rounds(epoch).call()
+            rounds.append(round_data)
+            print(f"Fetched round {epoch}: {round_data}")
+        except Exception as e:
+            print(f"Error fetching data for round {epoch}: {e}")
+    
+    return rounds
 
-    # Prepare transaction
-    txn = bet_function().build_transaction({
-        'from': WALLET_ADDRESS,
-        'value': web3.to_wei(amount, 'ether'),
-        'gas': 300000,
-        'gasPrice': web3.to_wei('5', 'gwei'),
-        'nonce': web3.eth.get_transaction_count(WALLET_ADDRESS),
-    })
+# Logic for making predictions based on historical data
+def make_prediction(rounds):
+    # Placeholder logic: Simple strategy based on past price movements
+    # You can replace this with more sophisticated analysis
+    
+    prediction = "bull"  # Default prediction is "bull"
+    
+    if rounds:
+        last_round = rounds[-1]
+        prev_round = rounds[-2] if len(rounds) > 1 else None
+        
+        # If price closed higher in the last round than the previous round, predict "bull"
+        if prev_round and last_round[5] > prev_round[5]:  # closePrice comparison
+            prediction = "bull"
+        else:
+            prediction = "bear"
+    
+    print(f"Prediction for current round: {prediction}")
+    return prediction
 
-    # Sign and send transaction
-    signed_txn = web3.eth.account.sign_transaction(txn, private_key=PRIVATE_KEY)
-    tx_hash = web3.eth.send_raw_transaction(signed_txn.rawTransaction)
+# Function to place a prediction
+def place_prediction(prediction, amount_in_wei):
+    try:
+        # Replace with actual account details and the method to place a bet
+        # For now, we assume you want to send a transaction for the prediction
+        account = web3.eth.account.privateKeyToAccount('your_private_key')  # Replace with your private key
+        nonce = web3.eth.get_transaction_count(account.address)
+        
+        # Assuming the contract has a method for placing bets (adjust according to the actual ABI)
+        if prediction == "bull":
+            tx = contract.functions.placeBullBet().buildTransaction({
+                'chainId': 56,  # BSC mainnet chain ID
+                'gas': 2000000,
+                'gasPrice': web3.toWei('5', 'gwei'),
+                'nonce': nonce,
+            })
+        else:
+            tx = contract.functions.placeBearBet().buildTransaction({
+                'chainId': 56,  # BSC mainnet chain ID
+                'gas': 2000000,
+                'gasPrice': web3.toWei('5', 'gwei'),
+                'nonce': nonce,
+            })
+        
+        # Sign and send the transaction
+        signed_tx = web3.eth.account.sign_transaction(tx, private_key='your_private_key')
+        tx_hash = web3.eth.sendRawTransaction(signed_tx.rawTransaction)
+        
+        print(f"Transaction sent. Hash: {web3.toHex(tx_hash)}")
+    except Exception as e:
+        print(f"Error placing prediction: {e}")
 
-    print(f"Transaction sent! TX Hash: {tx_hash.hex()}")
-    return tx_hash
-
+# Main function
 def main():
-    while True:
-        # Fetch current round details
-        current_round = contract.functions.currentEpoch().call()
-        print(f"Current Round: {current_round}")
+    try:
+        # Fetch historical data (last 5 rounds)
+        rounds = fetch_historical_round_data(5)
 
-        # Fetch data for decision-making (e.g., historical trends)
-        # Add logic to decide "bull" or "bear" based on your strategy
-        decision = "bull"  # Example: always bet "bull" for now
+        # Make a prediction based on the historical data
+        prediction = make_prediction(rounds)
 
-        # Place bet with a fixed amount (e.g., 0.01 BNB)
-        tx_hash = place_bet(decision, 0.01)
-        print(f"Bet placed on {decision.upper()}! TX Hash: {tx_hash.hex()}")
-
-        # Wait for the next round (PancakeSwap rounds are 5 minutes)
-        print("Waiting for the next round...")
-        time.sleep(5 * 60)  # 5 minutes
+        # Place the prediction (for example, placing 1 BNB worth of prediction)
+        amount_in_wei = web3.toWei(1, 'ether')  # Example: 1 BNB
+        place_prediction(prediction, amount_in_wei)
+    
+    except Exception as e:
+        print(f"Error interacting with the contract: {e}")
 
 if __name__ == "__main__":
     main()
+
