@@ -244,4 +244,54 @@ Before you start investing real funds, it’s essential to backtest your strateg
 
 If backtesting isn't possible on PancakeSwap Prediction, consider paper trading (simulating trades without using real money) to test your strategy.
 
+---
+
+# PancakeSwap Prediction Market Strategy and Bot Information
+
+This document provides insights into common strategies and trading bots used in PancakeSwap's prediction market. Note that using trading bots may involve risks and could violate PancakeSwap’s terms of service.
+
+## Strategies
+
+1. **Trend Analysis**:
+   - Monitor market trends (up or down) over multiple rounds.
+   - Place predictions based on observed patterns, assuming trends may persist.
+
+2. **Hedging**:
+   - Place bets on both "UP" and "DOWN" with varying amounts to reduce risk and secure small profits.
+
+3. **Risk Management**:
+   - Only allocate a small portion of your capital for each prediction.
+   - Focus on rounds where the odds appear more favorable and avoid over-leveraging.
+
+4. **Sniping**:
+   - Make predictions as close to the lock-in time as possible, using recent price movements as an indicator.
+
+5. **Martingale Strategy**:
+   - Double your bet after each loss to recover prior losses and secure a small profit upon winning.
+
+## Trading Bots
+
+### Types of Bots
+1. **Custom Bots**:
+   - Developed by advanced users with programming skills, often using Python or JavaScript with Web3 libraries.
+   - Designed to monitor price trends and place bets automatically.
+
+2. **Community Bots**:
+   - Public bots shared on GitHub or Telegram groups.
+   - Use caution, as these may contain malicious code or scams.
+
+3. **AI-Driven Bots**:
+   - Utilize machine learning to analyze historical data and make predictions based on probabilities.
+
+### Caution
+- Bots may be against PancakeSwap’s terms and can result in penalties.
+- Always verify the source of a bot and test with small amounts or simulations to minimize risks.
+
+## Risks
+- **Market Volatility**: Prediction outcomes can be highly unpredictable due to market manipulation or sudden price changes.
+- **No Guarantees**: Strategies and bots do not guarantee profits. Only use funds you can afford to lose.
+
+For more information on PancakeSwap, visit [PancakeSwap Finance](https://pancakeswap.finance). Always trade responsibly!
+
+
 Important Note: Prediction markets are highly speculative, and profits are not guaranteed. Ensure you only risk funds you can afford to lose and consider diversifying across multiple prediction rounds.
